@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { events, members, gallery } from "@/lib/mock-data";
+import { events, gallery } from "@/lib/mock-data";
+import { useAppContext } from "../context/AppContext";
 import { Bell, Search, Plus, ArrowRight, Image, Settings } from "lucide-react";
 
 export const Route = createFileRoute("/_app/home")({
@@ -8,12 +9,14 @@ export const Route = createFileRoute("/_app/home")({
 });
 
 function Home() {
+  const { members, currentUser } = useAppContext();
+
   return (
-    <div className="px-5 pt-2 space-y-5">
+    <div className="px-5 sm:px-8 pt-2 sm:pt-6 space-y-5 sm:space-y-8">
       <header className="flex items-center justify-between">
         <div>
           <p className="text-xs text-muted-foreground">2026년 5월 8일 · 금요일</p>
-          <h1 className="text-2xl font-bold leading-tight mt-0.5">안녕하세요, <span className="text-primary">민준</span>님 ☀️</h1>
+          <h1 className="text-2xl font-bold leading-tight mt-0.5">안녕하세요, <span className="text-primary">{currentUser.name}</span>님 ☀️</h1>
         </div>
         <div className="flex items-center gap-2">
           <button className="w-10 h-10 grid place-items-center rounded-full glass">
@@ -47,7 +50,7 @@ function Home() {
 
       {/* quick actions */}
       <section>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-2 sm:gap-4">
           {[
             { to: "/events", label: "일정", icon: "📅" },
             { to: "/members", label: "회원", icon: "👥" },
@@ -68,7 +71,7 @@ function Home() {
           <h3 className="font-heading font-bold">다가오는 모임</h3>
           <Link to="/events" className="text-xs text-primary font-semibold">전체 보기</Link>
         </div>
-        <div className="flex gap-3 overflow-x-auto no-scrollbar -mx-5 px-5 pb-2">
+        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 overflow-x-auto sm:overflow-visible no-scrollbar -mx-5 sm:mx-0 px-5 sm:px-0 pb-2">
           {events.slice(0, 3).map((e) => (
             <div key={e.id} className={`min-w-[180px] rounded-2xl p-4 bg-gradient-to-br ${e.color} shadow-card`}>
               <span className="inline-block text-[10px] font-bold uppercase tracking-wider bg-white/60 backdrop-blur px-2 py-0.5 rounded-full">
@@ -90,8 +93,8 @@ function Home() {
             <Image className="w-3 h-3" /> 갤러리
           </Link>
         </div>
-        <div className="grid grid-cols-3 gap-2">
-          {gallery.slice(0, 3).map((g) => (
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
+          {gallery.slice(0, 5).map((g) => (
             <div key={g.id} className="aspect-square rounded-2xl overflow-hidden shadow-card">
               <img src={g.url} className="w-full h-full object-cover" />
             </div>
