@@ -3,7 +3,7 @@ import { chats } from "@/lib/mock-data";
 import { Search, Edit3, Megaphone, Pin } from "lucide-react";
 
 export const Route = createFileRoute("/_app/chat")({
-  head: () => ({ meta: [{ title: "채팅 — DBG 동호회" }] }),
+  head: () => ({ meta: [{ title: "채팅 — DB글로벌칩 동호회 커뮤니티" }] }),
   component: Chat,
 });
 

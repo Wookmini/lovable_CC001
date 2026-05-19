@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 
 export const Route = createFileRoute("/_app/members")({
-  head: () => ({ meta: [{ title: "회원 및 동호회 — DBG 동호회" }] }),
+  head: () => ({ meta: [{ title: "회원 및 동호회 — DB글로벌칩 동호회 커뮤니티" }] }),
   component: Members,
 });
 

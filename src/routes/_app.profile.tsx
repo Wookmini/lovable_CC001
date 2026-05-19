@@ -3,7 +3,7 @@ import { profile } from "@/lib/mock-data";
 import { Settings, Edit3, Share2 } from "lucide-react";
 
 export const Route = createFileRoute("/_app/profile")({
-  head: () => ({ meta: [{ title: "프로필 — DBG 동호회" }] }),
+  head: () => ({ meta: [{ title: "프로필 — DB글로벌칩 동호회 커뮤니티" }] }),
   component: Profile,
 });
 

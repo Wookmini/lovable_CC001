@@ -3,7 +3,7 @@ import { gallery } from "@/lib/mock-data";
 import { Heart, MessageCircle, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_app/gallery")({
-  head: () => ({ meta: [{ title: "갤러리 — DBG 동호회" }] }),
+  head: () => ({ meta: [{ title: "갤러리 — DB글로벌칩 동호회 커뮤니티" }] }),
   component: Gallery,
 });
 

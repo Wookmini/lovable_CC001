@@ -1,14 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { GradientBlob } from "@/components/GradientBlob";
+import { DBLogo } from "@/components/DBLogo";
 import { ArrowRight, Users, Calendar, Sparkles } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "DBG 동호회 — 사내 동호회 앱" },
-      { name: "description", content: "DBG 사내 동호회를 위한 모바일 앱. 모임, 회원, 채팅, 갤러리를 한 곳에서." },
+      { title: "DB글로벌칩 동호회 커뮤니티" },
+      { name: "description", content: "DB글로벌칩 사내 동호회를 위한 모바일 앱. 모임, 회원, 채팅, 갤러리를 한 곳에서." },
     ],
   }),
   component: Onboarding,
@@ -48,8 +49,8 @@ function Onboarding() {
         <div className="relative z-10 h-full flex flex-col px-7 pt-14 pb-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-2xl bg-gradient-primary grid place-items-center text-primary-foreground font-bold shadow-soft">D</div>
-              <span className="font-heading font-bold tracking-tight">DBG 동호회</span>
+              <DBLogo size={36} className="shadow-soft rounded-xl" />
+              <span className="font-heading font-bold tracking-tight text-sm">DB글로벌칩 동호회 커뮤니티</span>
             </div>
             {!last && (
               <button onClick={() => setI(slides.length - 1)} className="text-xs text-muted-foreground">

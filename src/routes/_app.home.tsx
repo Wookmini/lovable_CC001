@@ -4,7 +4,7 @@ import { useAppContext } from "../context/AppContext";
 import { Bell, Search, Plus, ArrowRight, Image, Settings } from "lucide-react";
 
 export const Route = createFileRoute("/_app/home")({
-  head: () => ({ meta: [{ title: "홈 — DBG 동호회" }] }),
+  head: () => ({ meta: [{ title: "홈 — DB글로벌칩 동호회 커뮤니티" }] }),
   component: Home,
 });
 

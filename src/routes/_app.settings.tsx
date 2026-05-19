@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 
 export const Route = createFileRoute("/_app/settings")({
-  head: () => ({ meta: [{ title: "설정 — DBG 동호회" }] }),
+  head: () => ({ meta: [{ title: "설정 — DB글로벌칩 동호회 커뮤니티" }] }),
   component: SettingsPage,
 });
 
@@ -102,7 +102,7 @@ function SettingsPage() {
       ))}
 
       <p className="text-center text-[10px] text-muted-foreground pt-4 pb-2">
-        DBG 동호회 v1.0.0 · Made with ♡
+        DB글로벌칩 동호회 커뮤니티 v1.0.0 · Made with ♡
       </p>
     </div>
   );

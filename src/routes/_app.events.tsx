@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 
 export const Route = createFileRoute("/_app/events")({
-  head: () => ({ meta: [{ title: "커뮤니티 — DBG 동호회" }] }),
+  head: () => ({ meta: [{ title: "커뮤니티 — DB글로벌칩 동호회 커뮤니티" }] }),
   component: CommunityBoard,
 });
 
@@ -40,7 +40,7 @@ function CommunityBoard() {
     <div className="px-5 sm:px-8 pt-2 sm:pt-6 space-y-4 sm:space-y-6 pb-24 h-full overflow-y-auto">
       <header className="flex items-center justify-between">
         <div>
-          <p className="text-xs text-muted-foreground">DBG 네트워크</p>
+          <p className="text-xs text-muted-foreground">DB글로벌칩 네트워크</p>
           <h1 className="text-2xl font-bold mt-0.5">커뮤니티</h1>
         </div>
         <button className="w-10 h-10 grid place-items-center rounded-full bg-gradient-primary text-primary-foreground shadow-soft">

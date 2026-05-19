@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Home, Users, Calendar, MessageCircle, User } from "lucide-react";
+import { DBLogo } from "@/components/DBLogo";
 
 const tabs = [
   { to: "/home", label: "홈", icon: Home },
@@ -15,8 +16,10 @@ export function BottomTabBar() {
     <nav className="absolute bottom-3 left-3 right-3 z-40 sm:relative sm:bottom-0 sm:left-0 sm:right-0 sm:w-64 sm:h-full sm:bg-secondary/20 sm:border-r sm:border-border/50">
       <div className="glass rounded-3xl px-2 py-2 flex items-center justify-between sm:flex-col sm:items-stretch sm:justify-start sm:p-6 sm:h-full sm:rounded-none sm:glass-none sm:bg-transparent sm:border-none sm:shadow-none sm:gap-2">
         <div className="hidden sm:flex items-center gap-2 mb-8 px-2">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-primary grid place-items-center text-primary-foreground font-bold shadow-soft">D</div>
-          <span className="font-heading font-bold text-lg tracking-tight">DBG 동호회</span>
+          <DBLogo size={36} className="shadow-soft rounded-xl" />
+          <span className="font-heading font-bold text-[13px] leading-tight tracking-tight text-foreground">
+            DB글로벌칩<br/>동호회 커뮤니티
+          </span>
         </div>
         {tabs.map((t) => {
           const active = path.startsWith(t.to);
