@@ -42,6 +42,7 @@
 
 | 버전/일자 | 주요 업데이트 내역 | 작성자 | 비고 |
 | :--- | :--- | :--- | :--- |
+| **`2026-05-27`** | **[2nd Push] 온보딩, 로그인 및 홈 대시보드 동적 기능 연동**<br>• `AppContext`에 `hasSeenOnboarding` 및 `isLoggedIn` 전역 상태 추가<br>• 온보딩 완료 시 `/auth` 리다이렉트 및 로그인 폼 상태 연동<br>• 비로그인 유저의 `/home` 등 내부 페이지 접근 차단 (보안 라우팅 적용)<br>• 홈 대시보드 메인 모임 카드에 RSVP(참여) 버튼 동적 상태 토글 및 인원수 실시간 카운팅 반영 | wookmini | |
 | **`2026-05-19`** | **[1st Push] 초기 프로젝트 구축 및 모바일 UI 기본 뼈대 수립**<br>• TanStack Start 기반의 사내 동호회 프로젝트 아키텍처 구성<br>• 모바일 전용 컨테이너 `PhoneFrame` 및 미려한 백그라운드 `GradientBlob` 컴포넌트 구현<br>• 온보딩(슬라이더), 로그인(Glassmorphism UI), 홈 대시보드 구조화 완료<br>• 일정(Events), 멤버(Members), 사진첩(Gallery) 등 코어 라우트 레이아웃 설계 | wookmini | Initial Commit |
 
 ---

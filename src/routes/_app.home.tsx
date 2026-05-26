@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { events, gallery } from "@/lib/mock-data";
 import { useAppContext } from "../context/AppContext";
 import { Bell, Search, Plus, ArrowRight, Image, Settings } from "lucide-react";
 
@@ -9,7 +8,8 @@ export const Route = createFileRoute("/_app/home")({
 });
 
 function Home() {
-  const { members, currentUser } = useAppContext();
+  const { members, currentUser, events, gallery, toggleRSVP } = useAppContext();
+  const heroEvent = events[0];
 
   return (
     <div className="px-5 sm:px-8 pt-2 sm:pt-6 space-y-5 sm:space-y-8">
@@ -30,23 +30,30 @@ function Home() {
       </header>
 
       {/* hero card */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-primary text-primary-foreground p-5 shadow-glow">
-        <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/15 blur-2xl" />
-        <p className="text-xs uppercase tracking-widest opacity-80">이번 주 모임</p>
-        <h2 className="text-xl font-bold mt-1 leading-tight">한강 야간 러닝 🌙</h2>
-        <p className="text-xs opacity-90 mt-1">5월 12일 화 · 19:30 · 반포한강공원</p>
-        <div className="flex items-center justify-between mt-4">
-          <div className="flex -space-x-2">
-            {members.slice(0, 4).map((m) => (
-              <img key={m.id} src={m.avatar} className="w-7 h-7 rounded-full border-2 border-white" />
-            ))}
-            <div className="w-7 h-7 rounded-full bg-white/30 grid place-items-center text-[10px] font-semibold border-2 border-white">+10</div>
+      {heroEvent && (
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-primary text-primary-foreground p-5 shadow-glow">
+          <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/15 blur-2xl" />
+          <p className="text-xs uppercase tracking-widest opacity-80">이번 주 모임</p>
+          <h2 className="text-xl font-bold mt-1 leading-tight">{heroEvent.title}</h2>
+          <p className="text-xs opacity-90 mt-1">{heroEvent.date} · {heroEvent.time} · {heroEvent.place}</p>
+          <div className="flex items-center justify-between mt-4">
+            <div className="flex -space-x-2">
+              {members.slice(0, 4).map((m) => (
+                <img key={m.id} src={m.avatar} className="w-7 h-7 rounded-full border-2 border-white" />
+              ))}
+              <div className="w-7 h-7 rounded-full bg-white/30 grid place-items-center text-[10px] font-semibold border-2 border-white">+{heroEvent.attendees}</div>
+            </div>
+            <button 
+              onClick={() => toggleRSVP(heroEvent.id)}
+              className={`backdrop-blur px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 transition-all ${
+                heroEvent.isAttending ? "bg-white text-primary" : "bg-white/25 text-white"
+              }`}
+            >
+              {heroEvent.isAttending ? "참여 중 ✔️" : <>참여 <ArrowRight className="w-3 h-3" /></>}
+            </button>
           </div>
-          <button className="bg-white/25 backdrop-blur px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1">
-            참여 <ArrowRight className="w-3 h-3" />
-          </button>
         </div>
-      </div>
+      )}
 
       {/* quick actions */}
       <section>

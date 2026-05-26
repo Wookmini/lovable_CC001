@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { MEMBERS_DATA, POSTS_DATA, CLUBS_DATA } from '../lib/mock-data';
+import { MEMBERS_DATA, POSTS_DATA, CLUBS_DATA, events as EVENTS_DATA, gallery as GALLERY_DATA } from '../lib/mock-data';
 
 export type UserRole = 'admin' | 'user' | 'president';
 
@@ -32,6 +32,26 @@ export interface Club {
   secretaryId: number | null;
 }
 
+export interface Event {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  place: string;
+  attendees: number;
+  team: string;
+  color: string;
+  isAttending?: boolean;
+}
+
+export interface Gallery {
+  id: string;
+  url: string;
+  h: number;
+  likes: number;
+  by: string;
+}
+
 export interface Notification {
   id: number;
   type: string;
@@ -48,10 +68,17 @@ interface AppContextType {
   posts: Post[];
   clubs: Club[];
   currentUser: Member;
+  events: Event[];
+  gallery: Gallery[];
   notifications: Notification[];
   currentUserNotifications: Notification[];
-  darkMode: boolean;
+  hasSeenOnboarding: boolean;
+  isLoggedIn: boolean;
   toggleDarkMode: () => void;
+  completeOnboarding: () => void;
+  login: (userId: number) => void;
+  logout: () => void;
+  toggleRSVP: (eventId: string) => void;
   addPost: (post: Partial<Post>) => void;
   toggleLike: (postId: number) => void;
   switchUser: (userId: number) => void;
@@ -85,8 +112,12 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [members, setMembers] = useState<Member[]>(() => loadData('dbg_members', MEMBERS_DATA));
   const [posts, setPosts] = useState<Post[]>(() => loadData('dbg_posts', POSTS_DATA));
   const [clubs, setClubs] = useState<Club[]>(() => loadData('dbg_clubs', CLUBS_DATA));
+  const [events, setEvents] = useState<Event[]>(() => loadData('dbg_events', EVENTS_DATA));
+  const [gallery, setGallery] = useState<Gallery[]>(() => loadData('dbg_gallery', GALLERY_DATA));
   const [notifications, setNotifications] = useState<Notification[]>(() => loadData('dbg_notifications', []));
   const [darkMode, setDarkMode] = useState<boolean>(() => loadData('dbg_darkMode', false));
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean>(() => loadData('dbg_hasSeenOnboarding', false));
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => loadData('dbg_isLoggedIn', false));
   
   const [currentUserId, setCurrentUserId] = useState<number>(() => {
     if (typeof window === 'undefined') return 1;
@@ -99,6 +130,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => { localStorage.setItem('dbg_members', JSON.stringify(members)); }, [members]);
   useEffect(() => { localStorage.setItem('dbg_posts', JSON.stringify(posts)); }, [posts]);
   useEffect(() => { localStorage.setItem('dbg_clubs', JSON.stringify(clubs)); }, [clubs]);
+  useEffect(() => { localStorage.setItem('dbg_events', JSON.stringify(events)); }, [events]);
+  useEffect(() => { localStorage.setItem('dbg_gallery', JSON.stringify(gallery)); }, [gallery]);
   useEffect(() => { localStorage.setItem('dbg_notifications', JSON.stringify(notifications)); }, [notifications]);
   useEffect(() => { 
     localStorage.setItem('dbg_darkMode', JSON.stringify(darkMode)); 
@@ -108,6 +141,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
+  useEffect(() => { localStorage.setItem('dbg_hasSeenOnboarding', JSON.stringify(hasSeenOnboarding)); }, [hasSeenOnboarding]);
+  useEffect(() => { localStorage.setItem('dbg_isLoggedIn', JSON.stringify(isLoggedIn)); }, [isLoggedIn]);
   useEffect(() => { localStorage.setItem('dbg_currentUserId', currentUserId.toString()); }, [currentUserId]);
 
   const addPost = (newPostData: Partial<Post>) => {
@@ -202,12 +237,38 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
+  const completeOnboarding = () => setHasSeenOnboarding(true);
+
+  const login = (userId: number) => {
+    setCurrentUserId(userId);
+    setIsLoggedIn(true);
+  };
+
+  const logout = () => {
+    setIsLoggedIn(false);
+  };
+
+  const toggleRSVP = (eventId: string) => {
+    setEvents(events.map(e => {
+      if (e.id === eventId) {
+        const attending = !e.isAttending;
+        return {
+          ...e,
+          isAttending: attending,
+          attendees: e.attendees + (attending ? 1 : -1)
+        };
+      }
+      return e;
+    }));
+  };
 
   return (
     <AppContext.Provider value={{ 
       members, posts, clubs, currentUser, 
+      events, gallery,
       notifications, currentUserNotifications, 
-      darkMode, toggleDarkMode,
+      darkMode, hasSeenOnboarding, isLoggedIn, toggleDarkMode, completeOnboarding,
+      login, logout, toggleRSVP,
       addPost, toggleLike, switchUser, 
       requestJoinClub, approveJoinRequest, rejectJoinRequest, dismissNotification
     }}>

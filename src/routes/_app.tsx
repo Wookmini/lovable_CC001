@@ -1,14 +1,21 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, Navigate } from "@tanstack/react-router";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { BottomTabBar } from "@/components/BottomTabBar";
 import { StatusBar } from "@/components/StatusBar";
 import { GradientBlob } from "@/components/GradientBlob";
+import { useAppContext } from "@/context/AppContext";
 
 export const Route = createFileRoute("/_app")({
   component: AppShell,
 });
 
 function AppShell() {
+  const { isLoggedIn } = useAppContext();
+
+  if (!isLoggedIn) {
+    return <Navigate to="/auth" replace />;
+  }
+
   return (
     <PhoneFrame>
       <div className="relative w-full h-full overflow-hidden flex flex-col sm:flex-row-reverse">

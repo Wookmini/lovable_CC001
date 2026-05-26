@@ -1,8 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { GradientBlob } from "@/components/GradientBlob";
 import { DBLogo } from "@/components/DBLogo";
 import { User, Lock, ArrowRight } from "lucide-react";
+import { useAppContext } from "@/context/AppContext";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "로그인 — DB글로벌칩 동호회 커뮤니티" }] }),
@@ -10,6 +11,19 @@ export const Route = createFileRoute("/auth")({
 });
 
 function Auth() {
+  const { isLoggedIn, login } = useAppContext();
+  const navigate = useNavigate();
+
+  if (isLoggedIn) {
+    return <Navigate to="/home" replace />;
+  }
+
+  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    login(1);
+    navigate({ to: "/home" });
+  };
+
   return (
     <PhoneFrame>
       <div className="relative w-full h-full overflow-hidden">
@@ -38,12 +52,12 @@ function Auth() {
             </div>
           </div>
 
-          <Link
-            to="/home"
+          <button
+            onClick={handleLogin}
             className="mt-6 w-full bg-gradient-primary text-primary-foreground rounded-2xl py-4 text-center font-semibold shadow-glow flex items-center justify-center gap-2"
           >
             로그인 <ArrowRight className="w-4 h-4" />
-          </Link>
+          </button>
 
           <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
             <div className="flex-1 h-px bg-border" /> 또는 <div className="flex-1 h-px bg-border" />
