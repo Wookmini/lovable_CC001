@@ -5,6 +5,12 @@
 
 ---
 
+## 🌐 Live Demo
+* **배포 주소:** [https://dbg-club-test.jeong16051303.workers.dev/home](https://dbg-club-test.jeong16051303.workers.dev/home)
+* Cloudflare Pages를 통한 자동 배포 환경 구성 완료 (자세한 내용은 `cloudflare_deployment_guide.md` 참고)
+
+---
+
 ## 🎨 주요 화면 및 기능
 
 *   **✨ 인터랙티브 온보딩 (Onboarding)**
