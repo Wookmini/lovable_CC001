@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { MEMBERS_DATA, POSTS_DATA, CLUBS_DATA } from '../lib/mock-data';
+import { supabase } from '../lib/supabase';
 
 export type UserRole = 'admin' | 'user' | 'president';
 
 export interface Member {
-  id: number;
+  id: string | number;
   name: string;
   dept: string;
   clubs: string[];
@@ -14,7 +15,7 @@ export interface Member {
 }
 
 export interface Post {
-  id: number;
+  id: string | number;
   club: string;
   category: string;
   title: string;
@@ -28,15 +29,15 @@ export interface Post {
 
 export interface Club {
   name: string;
-  presidentId: number;
-  secretaryId: number | null;
+  presidentId: string | number;
+  secretaryId: string | number | null;
 }
 
 export interface Notification {
-  id: number;
+  id: string | number;
   type: string;
-  toUserId: number;
-  fromUserId?: number;
+  toUserId: string | number;
+  fromUserId?: string | number;
   fromUserName: string;
   clubName: string;
   status: string;
@@ -54,11 +55,11 @@ interface AppContextType {
   toggleDarkMode: () => void;
   addPost: (post: Partial<Post>) => void;
   toggleLike: (postId: number) => void;
-  switchUser: (userId: number) => void;
+  switchUser: (userId: string | number) => void;
   requestJoinClub: (clubName: string) => void;
-  approveJoinRequest: (notificationId: number) => void;
-  rejectJoinRequest: (notificationId: number) => void;
-  dismissNotification: (id: number) => void;
+  approveJoinRequest: (notificationId: string | number) => void;
+  rejectJoinRequest: (notificationId: string | number) => void;
+  dismissNotification: (id: string | number) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -88,11 +89,68 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [notifications, setNotifications] = useState<Notification[]>(() => loadData('dbg_notifications', []));
   const [darkMode, setDarkMode] = useState<boolean>(() => loadData('dbg_darkMode', false));
   
-  const [currentUserId, setCurrentUserId] = useState<number>(() => {
+  const [currentUserId, setCurrentUserId] = useState<string | number>(() => {
     if (typeof window === 'undefined') return 1;
     const saved = localStorage.getItem('dbg_currentUserId');
+    // If it's a UUID, parse won't work correctly, so handle string or number
+    if (saved && saved.includes('-')) return saved;
     return saved ? parseInt(saved) : 1;
   });
+
+  // Fetch real users from Supabase and merge with mock data
+  useEffect(() => {
+    const fetchSupabaseMembers = async () => {
+      try {
+        const { data: profiles, error: profileError } = await supabase.from('profiles').select('*');
+        const { data: clubMembers, error: clubError } = await supabase.from('club_members').select('*');
+        const { data: supabaseClubs, error: supabaseClubsError } = await supabase.from('clubs').select('*');
+        
+        if (profiles && profiles.length > 0) {
+          const supabaseMembers: Member[] = profiles.map(p => {
+            const userClubs = clubMembers 
+              ? clubMembers.filter(cm => cm.profile_id === p.id).map(cm => cm.club_name)
+              : [];
+            
+            return {
+              id: p.id,
+              name: p.full_name || p.employee_id,
+              dept: p.department || '소속 없음',
+              clubs: userClubs,
+              avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.employee_id}`,
+              role: 'user',
+              status: 'online'
+            };
+          });
+
+          // Combine with mock data or replace. For now, let's prepend them to mock data
+          setMembers(prev => {
+            // Filter out any prev members that have the same ID to avoid duplicates
+            const existingIds = new Set(supabaseMembers.map(sm => sm.id));
+            const filteredMock = prev.filter(m => !existingIds.has(m.id) && typeof m.id === 'number');
+            return [...supabaseMembers, ...filteredMock];
+          });
+        }
+
+        if (supabaseClubs && supabaseClubs.length > 0) {
+          const mappedClubs: Club[] = supabaseClubs.map(c => ({
+            name: c.name,
+            presidentId: c.president_id || 1, // Fallback or null string if preferred
+            secretaryId: c.secretary_id || null
+          }));
+          
+          setClubs(prev => {
+            const existingNames = new Set(mappedClubs.map(mc => mc.name));
+            const filteredMock = prev.filter(c => !existingNames.has(c.name));
+            return [...mappedClubs, ...filteredMock];
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch from Supabase:", err);
+      }
+    };
+    
+    fetchSupabaseMembers();
+  }, []);
 
   const currentUser = members.find(m => m.id === currentUserId) || members[0];
 

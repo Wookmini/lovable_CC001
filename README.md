@@ -42,6 +42,7 @@
 
 | 버전/일자 | 주요 업데이트 내역 | 작성자 | 비고 |
 | :--- | :--- | :--- | :--- |
+| **`2026-06-08`** | **[2nd Push] Supabase 백엔드 연동 및 실제 데이터 마이그레이션 완료**<br>• `@supabase/supabase-js` 연동 및 환경변수 설정<br>• 사원번호 기반 로그인 로직 구현 및 자동 프로필 생성<br>• 설정 페이지 내 비밀번호 변경 및 로그아웃 기능 추가<br>• 임직원 190명 Auth 계정 및 프로필 데이터 자동 일괄 업로드 스크립트 작성 및 실행<br>• 실제 사내 동호회 9개 생성 및 임직원 가입 내역 85건 DB 일괄 업로드<br>• Mock 데이터 대신 Supabase DB에서 실제 회원 및 동호회 정보를 불러오도록 `AppContext` 리팩토링 | wookmini | Supabase Integration |
 | **`2026-05-19`** | **[1st Push] 초기 프로젝트 구축 및 모바일 UI 기본 뼈대 수립**<br>• TanStack Start 기반의 사내 동호회 프로젝트 아키텍처 구성<br>• 모바일 전용 컨테이너 `PhoneFrame` 및 미려한 백그라운드 `GradientBlob` 컴포넌트 구현<br>• 온보딩(슬라이더), 로그인(Glassmorphism UI), 홈 대시보드 구조화 완료<br>• 일정(Events), 멤버(Members), 사진첩(Gallery) 등 코어 라우트 레이아웃 설계 | wookmini | Initial Commit |
 
 ---

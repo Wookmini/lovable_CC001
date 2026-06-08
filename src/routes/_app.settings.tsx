@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronRight, Bell, Moon, Globe, Lock, HelpCircle, LogOut, ChevronLeft, User, ShieldAlert } from "lucide-react";
 import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
+import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/_app/settings")({
   head: () => ({ meta: [{ title: "설정 — DB글로벌칩 동호회 커뮤니티" }] }),
@@ -27,12 +28,38 @@ function SettingsPage() {
   const [push, setPush] = useState(true);
   const [sound, setSound] = useState(true);
 
+  const handlePasswordChange = async () => {
+    const newPassword = prompt("새로운 비밀번호를 입력해주세요:");
+    if (!newPassword) return;
+    
+    if (newPassword.length < 6) {
+      alert("비밀번호는 최소 6자리 이상이어야 합니다.");
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) throw error;
+      alert("비밀번호가 성공적으로 변경되었습니다.");
+    } catch (error: any) {
+      alert("비밀번호 변경 실패: " + error.message);
+    }
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/auth';
+  };
+
   const sections: { title: string; items: { icon: any; label: string; right?: React.ReactNode; tone?: string; onClick?: () => void }[] }[] = [
     {
       title: "계정",
       items: [
         { icon: User, label: "프로필 편집", right: <ChevronRight className="w-4 h-4 text-muted-foreground" /> },
-        { icon: Lock, label: "보안 & 비밀번호", right: <ChevronRight className="w-4 h-4 text-muted-foreground" /> },
+        { icon: Lock, label: "보안 & 비밀번호", right: <ChevronRight className="w-4 h-4 text-muted-foreground" />, onClick: handlePasswordChange },
       ],
     },
     {
@@ -59,7 +86,7 @@ function SettingsPage() {
       title: "지원",
       items: [
         { icon: HelpCircle, label: "도움말 & 문의", right: <ChevronRight className="w-4 h-4 text-muted-foreground" /> },
-        { icon: LogOut, label: "로그아웃", tone: "destructive" },
+        { icon: LogOut, label: "로그아웃", tone: "destructive", onClick: handleLogout },
       ],
     },
   ];
