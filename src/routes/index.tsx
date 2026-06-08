@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { GradientBlob } from "@/components/GradientBlob";
 import { DBLogo } from "@/components/DBLogo";
 import { ArrowRight, Users, Calendar, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { useAppContext } from "@/context/AppContext";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,7 +38,14 @@ const slides = [
 ];
 
 function Onboarding() {
+  const { hasSeenOnboarding, completeOnboarding } = useAppContext();
+  const navigate = useNavigate();
   const [i, setI] = useState(0);
+
+  if (hasSeenOnboarding) {
+    return <Navigate to="/auth" replace />;
+  }
+
   const last = i === slides.length - 1;
   const S = slides[i];
   const Icon = S.icon;
@@ -53,7 +61,13 @@ function Onboarding() {
               <span className="font-heading font-bold tracking-tight text-sm">DB글로벌칩 동호회 커뮤니티</span>
             </div>
             {!last && (
-              <button onClick={() => setI(slides.length - 1)} className="text-xs text-muted-foreground">
+              <button 
+                onClick={() => {
+                  completeOnboarding();
+                  navigate({ to: "/auth" });
+                }} 
+                className="text-xs text-muted-foreground"
+              >
                 건너뛰기
               </button>
             )}
@@ -80,6 +94,7 @@ function Onboarding() {
           {last ? (
             <Link
               to="/auth"
+              onClick={() => completeOnboarding()}
               className="w-full bg-gradient-primary text-primary-foreground rounded-2xl py-4 text-center font-semibold shadow-glow flex items-center justify-center gap-2"
             >
               시작하기 <ArrowRight className="w-4 h-4" />
