@@ -60,6 +60,8 @@ interface AppContextType {
   approveJoinRequest: (notificationId: string | number) => void;
   rejectJoinRequest: (notificationId: string | number) => void;
   dismissNotification: (id: string | number) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (val: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -95,6 +97,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     // If it's a UUID, parse won't work correctly, so handle string or number
     if (saved && saved.includes('-')) return saved;
     return saved ? parseInt(saved) : 1;
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('dbg_isLoggedIn') === 'true';
   });
 
   // Fetch real users from Supabase and merge with mock data
@@ -167,6 +174,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [darkMode]);
   useEffect(() => { localStorage.setItem('dbg_currentUserId', currentUserId.toString()); }, [currentUserId]);
+  useEffect(() => { localStorage.setItem('dbg_isLoggedIn', isLoggedIn.toString()); }, [isLoggedIn]);
 
   const addPost = (newPostData: Partial<Post>) => {
     const newPost: Post = {
@@ -189,8 +197,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setPosts(posts.map(post => post.id === postId ? { ...post, likes: post.likes + 1 } : post));
   };
 
-  const switchUser = (userId: number) => {
+  const switchUser = (userId: number | string) => {
     setCurrentUserId(userId);
+    setIsLoggedIn(true);
   };
 
   const requestJoinClub = (clubName: string) => {
@@ -267,7 +276,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       notifications, currentUserNotifications, 
       darkMode, toggleDarkMode,
       addPost, toggleLike, switchUser, 
-      requestJoinClub, approveJoinRequest, rejectJoinRequest, dismissNotification
+      requestJoinClub, approveJoinRequest, rejectJoinRequest, dismissNotification,
+      isLoggedIn, setIsLoggedIn
     }}>
       {children}
     </AppContext.Provider>

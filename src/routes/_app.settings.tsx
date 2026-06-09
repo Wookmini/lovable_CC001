@@ -51,6 +51,7 @@ function SettingsPage() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    localStorage.removeItem('dbg_isLoggedIn');
     window.location.href = '/auth';
   };
 
