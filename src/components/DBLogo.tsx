@@ -13,11 +13,10 @@ export function DBLogo({ className = "" }: DBLogoProps) {
         className="h-10 sm:h-12 object-contain"
       />
       <span 
-        className="font-bold text-[16px] sm:text-[18px] tracking-tight text-[#009245] dark:text-[#00c055]"
+        className="font-bold text-[1.1rem] tracking-tight text-[#009245] dark:text-[#00c055] pl-[3.0rem] sm:pl-[3.5rem]"
         style={{ 
           fontFamily: '"Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif',
-          marginTop: '-4px', 
-          marginLeft: '2.8rem' // 로고 심볼 너비만큼 밀어서 G부터 시작하도록 맞춤
+          marginTop: '-4px'
         }}
       >
         동호회 커뮤니티
