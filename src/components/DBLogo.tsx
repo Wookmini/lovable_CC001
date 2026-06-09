@@ -12,7 +12,7 @@ export function DBLogo({ className = "" }: DBLogoProps) {
         alt="DB GlobalChip" 
         className="h-12 sm:h-14 object-contain"
       />
-      <span className="font-sans font-semibold text-lg tracking-tight text-slate-600 dark:text-slate-300 pl-1.5">
+      <span className="font-sans font-bold text-[1.1rem] tracking-tight text-[#00923f] dark:text-[#00c055] pl-[3.2rem] sm:pl-[3.8rem] -mt-1">
         동호회 커뮤니티
       </span>
     </div>
