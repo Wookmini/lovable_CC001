@@ -128,7 +128,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
               dept: p.department || '소속 없음',
               clubs: userClubs,
               avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.employee_id}`,
-              role: 'user',
+              role: p.employee_id === '20000177' ? 'admin' : 'user',
               status: 'online'
             };
           });
