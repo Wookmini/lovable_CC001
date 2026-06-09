@@ -6,13 +6,16 @@ interface DBLogoProps {
 
 export function DBLogo({ className = "" }: DBLogoProps) {
   return (
-    <div className={`flex flex-col gap-1.5 items-start ${className}`}>
+    <div className={`flex flex-col items-end ${className}`} style={{ width: 'fit-content' }}>
       <img 
         src="/db-logo.png" 
         alt="DB GlobalChip" 
-        className="h-12 sm:h-14 object-contain"
+        className="h-10 sm:h-12 object-contain"
       />
-      <span className="font-sans font-bold text-[1.1rem] tracking-tight text-[#00923f] dark:text-[#00c055] pl-[3.2rem] sm:pl-[3.8rem] -mt-1">
+      <span 
+        className="font-sans font-medium text-[15px] sm:text-[17px] tracking-tight text-[#009245] dark:text-[#00c055]"
+        style={{ marginTop: '-2px', paddingRight: '2px' }}
+      >
         동호회 커뮤니티
       </span>
     </div>
