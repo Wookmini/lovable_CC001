@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { MEMBERS_DATA, POSTS_DATA, CLUBS_DATA } from '../lib/mock-data';
+import { MEMBERS_DATA, POSTS_DATA, CLUBS_DATA, events as MOCK_EVENTS, gallery as MOCK_GALLERY } from '../lib/mock-data';
 import { supabase } from '../lib/supabase';
 
 export type UserRole = 'admin' | 'user' | 'president';
@@ -59,9 +59,11 @@ interface AppContextType {
   requestJoinClub: (clubName: string) => void;
   approveJoinRequest: (notificationId: string | number) => void;
   rejectJoinRequest: (notificationId: string | number) => void;
-  dismissNotification: (id: string | number) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (val: boolean) => void;
+  events: any[];
+  gallery: any[];
+  toggleRSVP: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -90,6 +92,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [clubs, setClubs] = useState<Club[]>(() => loadData('dbg_clubs', CLUBS_DATA));
   const [notifications, setNotifications] = useState<Notification[]>(() => loadData('dbg_notifications', []));
   const [darkMode, setDarkMode] = useState<boolean>(() => loadData('dbg_darkMode', false));
+  const [events, setEvents] = useState<any[]>(() => loadData('dbg_events', MOCK_EVENTS));
+  const [gallery, setGallery] = useState<any[]>(() => loadData('dbg_gallery', MOCK_GALLERY));
   
   const [currentUserId, setCurrentUserId] = useState<string | number>(() => {
     if (typeof window === 'undefined') return 1;
@@ -175,6 +179,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }, [darkMode]);
   useEffect(() => { localStorage.setItem('dbg_currentUserId', currentUserId.toString()); }, [currentUserId]);
   useEffect(() => { localStorage.setItem('dbg_isLoggedIn', isLoggedIn.toString()); }, [isLoggedIn]);
+  useEffect(() => { localStorage.setItem('dbg_events', JSON.stringify(events)); }, [events]);
+  useEffect(() => { localStorage.setItem('dbg_gallery', JSON.stringify(gallery)); }, [gallery]);
 
   const addPost = (newPostData: Partial<Post>) => {
     const newPost: Post = {
@@ -195,6 +201,19 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   const toggleLike = (postId: number) => {
     setPosts(posts.map(post => post.id === postId ? { ...post, likes: post.likes + 1 } : post));
+  };
+
+  const toggleRSVP = (eventId: string) => {
+    setEvents(events.map(event => {
+      if (event.id === eventId) {
+        return {
+          ...event,
+          isAttending: !event.isAttending,
+          attendees: event.isAttending ? event.attendees - 1 : event.attendees + 1
+        };
+      }
+      return event;
+    }));
   };
 
   const switchUser = (userId: number | string) => {
@@ -277,7 +296,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       darkMode, toggleDarkMode,
       addPost, toggleLike, switchUser, 
       requestJoinClub, approveJoinRequest, rejectJoinRequest, dismissNotification,
-      isLoggedIn, setIsLoggedIn
+      isLoggedIn, setIsLoggedIn,
+      events, gallery, toggleRSVP
     }}>
       {children}
     </AppContext.Provider>
