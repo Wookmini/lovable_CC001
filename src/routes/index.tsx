@@ -56,10 +56,7 @@ function Onboarding() {
         <div className={`absolute inset-0 bg-gradient-to-br ${S.bg} transition-all duration-700`} />
         <div className="relative z-10 h-full flex flex-col px-7 pt-14 pb-10">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <DBLogo size={36} className="shadow-soft rounded-xl" />
-              <span className="font-heading font-bold tracking-tight text-sm">DB글로벌칩 동호회 커뮤니티</span>
-            </div>
+            <DBLogo />
             {!last && (
               <button 
                 onClick={() => {

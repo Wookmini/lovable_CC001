@@ -80,7 +80,7 @@ function Auth() {
         <GradientBlob />
         <div className="relative z-10 h-full flex flex-col px-7 pt-16 pb-10">
           <div className="mb-10">
-            <DBLogo size={48} className="mb-6 shadow-soft rounded-2xl" />
+            <DBLogo className="mb-8" />
             <h1 className="text-3xl font-bold leading-tight">다시 만나서<br />반가워요 👋</h1>
             <p className="text-muted-foreground mt-2 text-sm">사원번호와 생년월일로 로그인해 주세요.</p>
           </div>
