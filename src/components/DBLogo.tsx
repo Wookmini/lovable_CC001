@@ -6,13 +6,13 @@ interface DBLogoProps {
 
 export function DBLogo({ className = "" }: DBLogoProps) {
   return (
-    <div className={`flex flex-col gap-1 items-start ${className}`}>
+    <div className={`flex flex-col gap-1.5 items-start ${className}`}>
       <img 
         src="/db-logo.png" 
         alt="DB GlobalChip" 
-        className="h-6 sm:h-7 object-contain"
+        className="h-12 sm:h-14 object-contain"
       />
-      <span className="font-heading font-bold text-sm tracking-tight text-foreground pl-1">
+      <span className="font-sans font-semibold text-lg tracking-tight text-slate-600 dark:text-slate-300 pl-1.5">
         동호회 커뮤니티
       </span>
     </div>
